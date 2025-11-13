@@ -25,9 +25,6 @@ size_t encode_record(const record_t *rec, uint8_t *out_buf, size_t out_cap) {
 size_t decode_record(const uint8_t *buf, size_t len, record_t **out) {
     size_t off = 0;
     uint8_t name_len = buf[off++];
-    if (name_len >= MAX_NAME) {
-        name_len = MAX_NAME - 1;
-    }
 
     record_t *rec = malloc(sizeof(record_t));
     if (!rec) return 0;
