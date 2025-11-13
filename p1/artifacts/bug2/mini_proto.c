@@ -28,15 +28,11 @@ size_t decode_record(const uint8_t *buf, size_t len, record_t **out) {
         return 0;
     }
     uint8_t name_len = buf[off++];
-    if (name_len >= MAX_NAME) {
-        name_len = MAX_NAME - 1;
-    }
 
     record_t *rec = malloc(sizeof(record_t));
     if (!rec) return 0;
 
     if (len < off + name_len) {
-        free(rec);
         return 0;
     }
     memcpy(rec->name, buf + off, name_len);
@@ -44,13 +40,11 @@ size_t decode_record(const uint8_t *buf, size_t len, record_t **out) {
     off += name_len;
 
     if (len < off + sizeof(uint8_t)) {
-        free(rec);
         return 0;
     }
     rec->age = buf[off++];
 
     if (len < off + sizeof(uint32_t)) {
-        free(rec);
         return 0;
     }
     memcpy(&rec->score_count, buf + off, 4); off += 4;
@@ -58,8 +52,6 @@ size_t decode_record(const uint8_t *buf, size_t len, record_t **out) {
     size_t space = rec->score_count * 2;
     rec->scores = malloc(space);
     if (len < off + space) {
-        free(rec->scores);
-        free(rec);
         return 0;
     }
     memcpy(rec->scores, buf + off, space);
