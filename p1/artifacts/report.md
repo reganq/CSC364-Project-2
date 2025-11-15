@@ -21,3 +21,9 @@
 - Trigger: Triggered in the first memcpy of encode_record, since name_len may be much larger than the given buffer. Could also trigger an out-of-memory error when allocating space for the buffer.
 - Root cause: The strlen call in encode_record will search until it encounters a null terminator, and can return a value much larger than the record if a null terminator is not added to the name.
 - Fix: Replacing the strlen call with strnlen ensures that the name length has a maximum size.
+
+### Bug5 - Offset overflow
+- Category: Integer overflow
+- Trigger: Occurs when a record is passed to encode that requires more space that can be represented by size_t (16 bits unsigned), which could lead to a heap overflow.  Note that this bug could not be triggered by decode, since the length of buffer is passed as a size_t (i.e. must be representable).
+- Root cause: Encode stores the size needed to store a record as a size_t. If the given record is too large, then the size variable will overflow causing too little memory to be allocated.
+- Fix: Add size checks in encode_record before adding ints to ensure no overflow occurs, and return early if it does.
