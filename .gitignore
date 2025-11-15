@@ -5,6 +5,10 @@
 *.exe
 *.obj
 
+# extra fuzzing stuff
+/p1/artifacts/fuzzing/crashes/
+/p1/artifacts/fuzzing/fuzz_out
+
 # Intermediate and build directories
 /build/
 /cmake-build-*/
