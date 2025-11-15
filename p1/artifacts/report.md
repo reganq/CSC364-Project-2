@@ -27,3 +27,9 @@
 - Trigger: Occurs when a record is passed to encode that requires more space that can be represented by size_t (16 bits unsigned), which could lead to a heap overflow.  Note that this bug could not be triggered by decode, since the length of buffer is passed as a size_t (i.e. must be representable).
 - Root cause: Encode stores the size needed to store a record as a size_t. If the given record is too large, then the size variable will overflow causing too little memory to be allocated.
 - Fix: Add size checks in encode_record before adding ints to ensure no overflow occurs, and return early if it does.
+
+### Bug 6 - Encoding overflow
+- Category: Heap/Stack overflow.
+- Trigger: Passing a buffer/record combo to encode_record with a buffer that is too small to hold the entirety of the record. Can lead to parts of the heap (or stack, if that's where the buffer was initialized) being overwritten.
+- Root cause: The size of the buffer (passed to encode_record in out_cap) is never checked.
+- Fix: Add a check once the expected size of the buffer has been calculated to ensure it can fit the entire record.
