@@ -9,3 +9,9 @@
 - Trigger: Trying to read more bytes than were allocated for the buffer at the first memcpy.
 - Root cause: The len field input for decode_record is never checked, so it is possible that memory that is too small has been input. For example, the crashing bug has a memory segment that is only one byte, meaning memcpy fails when copying from the buffer since the memory wasn't allocated.
 - Fix: Add a size check before accessing the buffer to ensure that it has enough memory to proceed. If not, return 0 (i.e meaning that the record was not decoded).
+
+### Bug3 - memory over-request bug
+- Category: out-of-memory error
+- Trigger: Allocating memory to to write the scores array into, size requested is too large.
+- Root cause: The value of score_count read from buf is larger than the available memory, so when allocating memory for the score array an out-of-memory bug is thrown. 
+- Fix: Add in a check before setting score_count, to ensure that it is no larger than the number of bytes remaining to be read (divided by two, as scores are 16-bit integers).
