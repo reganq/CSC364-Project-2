@@ -1,0 +1,22 @@
+--- original/mini_proto.c	2025-11-06 11:29:10.138672865 -0500
++++ artifacts/bug5/mini_proto.c	2025-11-15 17:05:18.026978944 -0500
+@@ -5,10 +5,18 @@
+ 
+ size_t encode_record(const record_t *rec, uint8_t *out_buf, size_t out_cap) {
+     size_t name_len = strlen(rec->name);
+-    size_t space = 1 + name_len + 1 + 4 + 2 * rec->score_count;
++    if (name_len > SIZE_MAX - 6) {
++        return 0;
++    }
++    size_t space = 1 + name_len + 1 + 4;
++    if (rec->score_count > (SIZE_MAX - space) / 2) {
++        return 0;
++    }
++    space = space + 2 * rec->score_count;
+ 
+     if (!out_buf) return space;
+ 
++    // off <= space, so if space is okay then off is okay.
+     size_t off = 0;
+     out_buf[off++] = (uint8_t)name_len;
+     memcpy(out_buf + off, rec->name, name_len); off += name_len;

@@ -1,0 +1,12 @@
+--- original/mini_proto.c	2025-11-06 11:29:10.138672865 -0500
++++ artifacts/bug1/mini_proto.c	2025-11-13 10:27:49.205077617 -0500
+@@ -25,6 +25,9 @@
+ size_t decode_record(const uint8_t *buf, size_t len, record_t **out) {
+     size_t off = 0;
+     uint8_t name_len = buf[off++];
++    if (name_len >= MAX_NAME) {
++        name_len = MAX_NAME - 1;
++    }
+ 
+     record_t *rec = malloc(sizeof(record_t));
+     if (!rec) return 0;

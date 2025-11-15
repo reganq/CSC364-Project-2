@@ -1,0 +1,13 @@
+--- original/mini_proto.c	2025-11-06 11:29:10.138672865 -0500
++++ artifacts/bug6/mini_proto.c	2025-11-15 17:25:08.646414680 -0500
+@@ -9,6 +9,10 @@
+ 
+     if (!out_buf) return space;
+ 
++    if (out_cap < space) {
++        return 0;
++    }
++
+     size_t off = 0;
+     out_buf[off++] = (uint8_t)name_len;
+     memcpy(out_buf + off, rec->name, name_len); off += name_len;

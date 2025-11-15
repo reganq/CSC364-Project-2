@@ -1,0 +1,39 @@
+--- original/mini_proto.c	2025-11-06 11:29:10.138672865 -0500
++++ artifacts/bug2/mini_proto.c	2025-11-13 12:34:22.701476637 -0500
+@@ -24,21 +24,36 @@
+ 
+ size_t decode_record(const uint8_t *buf, size_t len, record_t **out) {
+     size_t off = 0;
++    if (len < sizeof(uint8_t)) {
++        return 0;
++    }
+     uint8_t name_len = buf[off++];
+ 
+     record_t *rec = malloc(sizeof(record_t));
+     if (!rec) return 0;
+ 
++    if (len < off + name_len) {
++        return 0;
++    }
+     memcpy(rec->name, buf + off, name_len);
+     rec->name[name_len] = '\0';
+     off += name_len;
+ 
++    if (len < off + sizeof(uint8_t)) {
++        return 0;
++    }
+     rec->age = buf[off++];
+ 
++    if (len < off + sizeof(uint32_t)) {
++        return 0;
++    }
+     memcpy(&rec->score_count, buf + off, 4); off += 4;
+ 
+     size_t space = rec->score_count * 2;
+     rec->scores = malloc(space);
++    if (len < off + space) {
++        return 0;
++    }
+     memcpy(rec->scores, buf + off, space);
+     off += space;
+ 

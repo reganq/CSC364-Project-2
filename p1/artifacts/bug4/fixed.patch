@@ -1,0 +1,18 @@
+--- original/mini_proto.c	2025-11-06 11:29:10.138672865 -0500
++++ artifacts/bug4/mini_proto.c	2025-11-15 14:05:56.844707636 -0500
+@@ -4,13 +4,13 @@
+ #include <stdio.h>
+ 
+ size_t encode_record(const record_t *rec, uint8_t *out_buf, size_t out_cap) {
+-    size_t name_len = strlen(rec->name);
++    size_t name_len = strnlen(rec->name, MAX_NAME);
+     size_t space = 1 + name_len + 1 + 4 + 2 * rec->score_count;
+ 
+     if (!out_buf) return space;
+ 
+     size_t off = 0;
+-    out_buf[off++] = (uint8_t)name_len;
++    out_buf[off++] = (uint8_t) name_len;
+     memcpy(out_buf + off, rec->name, name_len); off += name_len;
+ 
+     out_buf[off++] = rec->age;

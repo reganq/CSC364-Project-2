@@ -1,0 +1,12 @@
+--- original/mini_proto.c	2025-11-06 11:29:10.138672865 -0500
++++ artifacts/bug3/mini_proto.c	2025-11-13 13:48:15.239368683 -0500
+@@ -36,6 +36,9 @@
+     rec->age = buf[off++];
+ 
+     memcpy(&rec->score_count, buf + off, 4); off += 4;
++    if (rec->score_count >= (len - off) / sizeof(uint16_t)) {
++        rec->score_count = (len - off) / sizeof(uint16_t);
++    }
+ 
+     size_t space = rec->score_count * 2;
+     rec->scores = malloc(space);
