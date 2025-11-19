@@ -21,3 +21,5 @@ For instance, bug1 has the crash file `crash-da39a3ee5e6b4b0d3255bfef95601890afd
 ```
 ./artifacts/fuzzing/fuzz_out -runs=1 p1/artifacts/bug1/crash-da39a3ee5e6b4b0d3255bfef95601890afd80709
 ```
+
+For furture work, adding fuzzing for `encode_record` would be helpful. This could be done by casting the array of bytes (the "fuzz") to a record, and passing that into the method.
