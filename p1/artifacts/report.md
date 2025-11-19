@@ -28,8 +28,8 @@
 - Root cause: Encode stores the size needed to store a record as a `size_t`. If the given record is too large, then the size variable will overflow causing too little memory to be allocated.
 - Fix: Add size checks in `encode_record` before adding ints to ensure no overflow occurs, and return early if it does.
 
-### Bug 6 - Encoding overflow
+### Bug 6 - Unsafe Buffer
 - Category: Heap/Stack overflow.
-- Trigger: Passing a buffer/record combo to `encode_record` with a buffer that is too small to hold the entirety of the record. Can lead to parts of the heap (or stack, if that's where the buffer was initialized) being overwritten.
-- Root cause: The size of the buffer (passed to `encode_record` in `out_cap`) is never checked.
-- Fix: Add a check once the expected size of the buffer has been calculated to ensure it can fit the entire record.
+- Trigger: Passing a buffer to `encode_record` that is not properly initialized can lead to the stack or heap being overflowed, depending on where the buffer was allocated.
+- Root cause: The buffer passed to `encode_record` cannot be validated to ensure it is the size claimed by `out_cap`.
+- Fix: Change the signature of `encode_record` to not allow the user to pass their own buffer. Rather, have them only pass the record to encode and a pointer to place the allocated buffer's address in.

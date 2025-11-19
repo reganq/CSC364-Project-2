@@ -34,8 +34,9 @@ int main(void) {
 
     print_record("Input Record", &in);
 
-    uint8_t *buf;
-    size_t wrote = encode_record(&in, &buf);
+    size_t need = encode_record(&in, NULL, 0);
+    uint8_t *buf = malloc(need);
+    size_t wrote = encode_record(&in, buf, need);
     if (wrote == 0) {
         fprintf(stderr, "❌ Encode failed\n");
         free(buf);

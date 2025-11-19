@@ -20,8 +20,9 @@ typedef struct {
 /* Layout:
    [name_len:1][name_bytes][age:1][score_count:4][scores:2*score_count]
 
-   Returns number of bytes written, or 0 on error. */
-size_t encode_record(const record_t *rec, uint8_t **out_buf);
+   Returns number of bytes written, or 0 on error.
+   If out_buf == NULL, returns the size that would be needed (non-zero). */
+size_t encode_record(const record_t *rec, uint8_t *out_buf, size_t out_cap);
 
 /* Decodes one record. On success:
      - *out points to a newly allocated record_t that you own
