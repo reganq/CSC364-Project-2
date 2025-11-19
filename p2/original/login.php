@@ -1,4 +1,4 @@
-<?php require 'utils.php'; require 'db.php'; $error=null; if($_SERVER['REQUEST_METHOD']==='POST'){ $db=get_db(); $stmt=$db->prepare('SELECT * FROM users WHERE username = ? AND password = ? LIMIT 1'); $res=$stmt->execute(array($_POST['username'], $_POST['password'])); $row=$stmt->fetch(PDO::FETCH_ASSOC); if($row){ $_SESSION['user']=$row; header('Location:index.php'); exit; } else { $error="Invalid credentials"; }} site_header('Login'); ?>
+<?php require 'utils.php'; require 'db.php'; $error=null; if($_SERVER['REQUEST_METHOD']==='POST'){ $db=get_db(); $sql="SELECT * FROM users WHERE username = '{$_POST['username']}' AND password = '{$_POST['password']}' LIMIT 1;"; $row=$db->query($sql)->fetch(PDO::FETCH_ASSOC); if($row){ $_SESSION['user']=$row; header('Location:index.php'); exit; } else { $error='Invalid credentials'; }} site_header('Login'); ?>
 
 <section class="page-header">
   <h1 class="page-title">Welcome back</h1>

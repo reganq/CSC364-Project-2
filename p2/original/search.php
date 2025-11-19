@@ -20,7 +20,7 @@
       <a class="btn link" href="index.php">Back to feed</a>
     </div>
   </form>
-  <?php if($q!==''){ echo "<div class='stack' style='margin-top:18px;'><p class='muted'>Results for: $q</p>"; $db=get_db(); $stmt=$db->prepare("SELECT id, username FROM users WHERE username LIKE ?"); $stmt->execute(array("%{$q}%")); foreach($stmt->fetchAll() as $row){ echo "<div><a class='btn link' href='user.php?id={$row['id']}'>".$row['username']."</a></div>"; } echo "</div>"; } ?>
+  <?php if($q!==''){ echo "<div class='stack' style='margin-top:18px;'><p class='muted'>Results for: $q</p>"; $db=get_db(); $sql="SELECT id, username FROM users WHERE username LIKE '%$q%'"; foreach($db->query($sql) as $row){ echo "<div><a class='btn link' href='user.php?id={$row['id']}'>".$row['username']."</a></div>"; } echo "</div>"; } ?>
 </section>
 
 <?php site_footer(); ?>
