@@ -9,6 +9,9 @@
 /p1/artifacts/fuzzing/crashes/
 /p1/artifacts/fuzzing/fuzz_out
 
+/project2.zip
+/project
+
 # Intermediate and build directories
 /build/
 /cmake-build-*/
